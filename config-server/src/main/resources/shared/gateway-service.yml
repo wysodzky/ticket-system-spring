@@ -1,0 +1,18 @@
+ribbon:
+  ReadTimeout: 20000
+  ConnectTimeout: 20000
+
+server:
+  port: 8080
+
+zuul:
+  routes:
+    order-service:
+      path: /order-service/**
+      url: http://127.0.0.1:8090/
+    catalog-service:
+      path: /catalog-service/**
+      url: http://127.0.0.1:8091/
+    payment-service:
+      path: /payment-service/**
+      url: http://127.0.0.1:8092
