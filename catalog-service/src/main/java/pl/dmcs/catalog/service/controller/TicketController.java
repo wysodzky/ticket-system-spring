@@ -1,12 +1,11 @@
 package pl.dmcs.catalog.service.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.dmcs.catalog.service.exception.NoAvailableTicketFoundException;
 import pl.dmcs.catalog.service.model.Ticket;
-import pl.dmcs.catalog.service.model.dto.ReservationTicketDtoResult;
 import pl.dmcs.catalog.service.model.dto.ReservationTicketDto;
+import pl.dmcs.catalog.service.model.dto.ReservationTicketDtoResult;
 import pl.dmcs.catalog.service.model.dto.TicketDto;
 import pl.dmcs.catalog.service.service.inf.TicketService;
 
@@ -14,8 +13,11 @@ import pl.dmcs.catalog.service.service.inf.TicketService;
 @RequestMapping("/tickets")
 public class TicketController {
 
-    @Autowired
-    private TicketService ticketService;
+    private final TicketService ticketService;
+
+    public TicketController(TicketService ticketService) {
+        this.ticketService = ticketService;
+    }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
@@ -25,7 +27,7 @@ public class TicketController {
     }
 
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/multiple", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity saveMultipleTickets(@RequestBody TicketDto ticketDto)  {
         ticketService.saveMultipleSameTickets(ticketDto);
@@ -50,7 +52,7 @@ public class TicketController {
         return ResponseEntity.ok(ticketService.getAll());
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/check", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity checkAndReserveTickets(@RequestBody ReservationTicketDto reservationTicketDto) {
         ReservationTicketDtoResult reservationTicketDtoResult;

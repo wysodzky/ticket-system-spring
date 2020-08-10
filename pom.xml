@@ -84,9 +84,7 @@
         <lombok.version>1.18.8</lombok.version>
         <itext.version>5.5.13</itext.version>
         <hibernate-core.version>5.4.6.Final</hibernate-core.version>
-        <h2-database.version>1.4.199</h2-database.version>
-        <itext.version>5.5.10</itext.version>
-        <pdf-box.version>2.0.4</pdf-box.version>
+        <postgresql-database.version>42.2.0</postgresql-database.version>
     </properties>
 
 </project>

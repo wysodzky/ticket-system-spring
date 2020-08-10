@@ -11,4 +11,5 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderDto {
     private List<TicketDto> tickets;
+    private String personIdentificationNumber;
 }

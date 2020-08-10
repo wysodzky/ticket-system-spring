@@ -1,5 +1,6 @@
 package pl.dmcs.order.service.service.impl;
 
+import com.netflix.ribbon.proxy.annotation.Http;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
@@ -18,15 +19,35 @@ import java.util.List;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    private static final String CATALOG_SERVICE_URL = "http://localhost:8080/catalog-service/";
+    private static final String CATALOG_SERVICE_URL = "http://localhost:8080/catalog-service/tickets";
 
-    @Autowired
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
+
+    public OrderServiceImpl(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
 
 
     @Override
     public void save(Order order) {
         orderRepository.save(order);
+    }
+
+    @Override
+    public void deleteOrder(Integer id) {
+        orderRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean checkAvailability(OrderDto orderDto) {
+        RestTemplate restTemplate = new RestTemplate();
+        for (TicketDto ticketDto : orderDto.getTickets()) {
+            Boolean available = restTemplate.getForObject(CATALOG_SERVICE_URL+"/availability/"+ticketDto.getTitle(),Boolean.class);
+            if (!available) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -50,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
             HttpEntity<ReservationTicketDto> request = new HttpEntity<>(reservationTicketDto);
 
             ReservationTicketDtoResult reservationTicketDtoResult = restTemplate.
-                    postForObject(CATALOG_SERVICE_URL,request,ReservationTicketDtoResult.class);
+                    postForObject(CATALOG_SERVICE_URL+"/check",request,ReservationTicketDtoResult.class);
             if (reservationTicketDtoResult != null && reservationTicketDtoResult.getTicketsNumbers() != null
                     && reservationTicketDtoResult.getTicketsNumbers().size() > 0) {
                 tickerNumbers.addAll(reservationTicketDtoResult.getTicketsNumbers());
@@ -58,6 +79,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         order.setTicketNumbers(tickerNumbers);
+        order.setPersonIdentificationNumber(orderDto.getPersonIdentificationNumber());
         orderRepository.save(order);
     }
 }

@@ -10,22 +10,36 @@ import pl.dmcs.order.service.service.inf.OrderService;
 @RequestMapping("/orders")
 public class OrderController {
 
-    @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
+
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity makeOrder(@RequestBody OrderDto orderDto) {
-        orderService.creatOrder(orderDto);
-        return ResponseEntity.ok().build();
+        if (!orderService.checkAvailability(orderDto)) {
+            orderService.creatOrder(orderDto);
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity makeOrder(@PathVariable Integer id) {
+    public ResponseEntity getOrder(@PathVariable Integer id) {
         return ResponseEntity.ok(orderService.getOrder(id));
+    }
+
+    @RequestMapping(value = "/{id}",method = RequestMethod.DELETE)
+    @ResponseBody
+    public ResponseEntity deleteOrder(@PathVariable Integer id) {
+        orderService.deleteOrder(id);
+        return ResponseEntity.ok().build();
     }
 
 

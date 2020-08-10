@@ -10,7 +10,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 public class Order {
 
     @Id
@@ -18,7 +18,10 @@ public class Order {
     @Column
     private Integer id;
 
-    @OneToMany
+    @ElementCollection
     private List<Integer> ticketNumbers;
+
+    @Column
+    private String personIdentificationNumber;
 
 }
