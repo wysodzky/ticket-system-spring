@@ -1,4 +1,4 @@
-package pl.dmcs.catalog.service.exception;
+package pl.dmcs.ticket.service.exception;
 
 public class NoAvailableTicketFoundException extends Exception {
     public NoAvailableTicketFoundException(String message) {

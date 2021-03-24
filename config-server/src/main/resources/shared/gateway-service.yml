@@ -10,8 +10,8 @@ zuul:
     order-service:
       path: /order-service/**
       url: http://127.0.0.1:8090/
-    catalog-service:
-      path: /catalog-service/**
+    ticket-service:
+      path: /ticket-service/**
       url: http://127.0.0.1:8091/
     payment-service:
       path: /payment-service/**

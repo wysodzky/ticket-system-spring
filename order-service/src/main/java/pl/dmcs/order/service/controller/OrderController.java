@@ -20,7 +20,7 @@ public class OrderController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity makeOrder(@RequestBody OrderDto orderDto) {
-        if (!orderService.checkAvailability(orderDto)) {
+        if (orderService.checkAvailability(orderDto)) {
             orderService.creatOrder(orderDto);
             return ResponseEntity.ok().build();
         }

@@ -1,15 +1,15 @@
-package pl.dmcs.catalog.service.service.impl;
+package pl.dmcs.ticket.service.service.impl;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.dmcs.catalog.service.exception.NoAvailableTicketFoundException;
-import pl.dmcs.catalog.service.model.Ticket;
-import pl.dmcs.catalog.service.model.dto.ReservationTicketDtoResult;
-import pl.dmcs.catalog.service.model.dto.ReservationTicketDto;
-import pl.dmcs.catalog.service.model.dto.TicketDto;
-import pl.dmcs.catalog.service.repository.TicketRepository;
-import pl.dmcs.catalog.service.service.inf.TicketService;
+import pl.dmcs.ticket.service.exception.NoAvailableTicketFoundException;
+import pl.dmcs.ticket.service.model.Ticket;
+import pl.dmcs.ticket.service.model.dto.ReservationTicketDtoResult;
+import pl.dmcs.ticket.service.model.dto.ReservationTicketDto;
+import pl.dmcs.ticket.service.model.dto.TicketDto;
+import pl.dmcs.ticket.service.repository.TicketRepository;
+import pl.dmcs.ticket.service.service.inf.TicketService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +59,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public ReservationTicketDtoResult reserveTickets(ReservationTicketDto reservationTicketDto) throws NoAvailableTicketFoundException {
-        List<Ticket> tickets = ticketRepository.getAllByTitle(reservationTicketDto.getTitle());
+        List<Ticket> tickets = ticketRepository.getAllByTitleAndReserved(reservationTicketDto.getTitle(), false);
         if (!(tickets.size() > 0)) {
             throw new NoAvailableTicketFoundException(reservationTicketDto.getTitle());
         }

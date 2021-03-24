@@ -1,11 +1,11 @@
-package pl.dmcs.catalog.service.service.inf;
+package pl.dmcs.ticket.service.service.inf;
 
 
-import pl.dmcs.catalog.service.exception.NoAvailableTicketFoundException;
-import pl.dmcs.catalog.service.model.Ticket;
-import pl.dmcs.catalog.service.model.dto.ReservationTicketDtoResult;
-import pl.dmcs.catalog.service.model.dto.ReservationTicketDto;
-import pl.dmcs.catalog.service.model.dto.TicketDto;
+import pl.dmcs.ticket.service.exception.NoAvailableTicketFoundException;
+import pl.dmcs.ticket.service.model.Ticket;
+import pl.dmcs.ticket.service.model.dto.ReservationTicketDtoResult;
+import pl.dmcs.ticket.service.model.dto.ReservationTicketDto;
+import pl.dmcs.ticket.service.model.dto.TicketDto;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package pl.dmcs.catalog.service.model;
+package pl.dmcs.ticket.service.model;
 
 import lombok.Data;
 

@@ -1,7 +1,5 @@
 package pl.dmcs.order.service.service.impl;
 
-import com.netflix.ribbon.proxy.annotation.Http;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -19,7 +17,7 @@ import java.util.List;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    private static final String CATALOG_SERVICE_URL = "http://localhost:8080/catalog-service/tickets";
+    private static final String TICKET_SERVICE_URL = "http://localhost:8080/ticket-service/tickets";
 
     private final OrderRepository orderRepository;
 
@@ -41,12 +39,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public boolean checkAvailability(OrderDto orderDto) {
         RestTemplate restTemplate = new RestTemplate();
-        for (TicketDto ticketDto : orderDto.getTickets()) {
-            Boolean available = restTemplate.getForObject(CATALOG_SERVICE_URL+"/availability/"+ticketDto.getTitle(),Boolean.class);
+            Boolean available = restTemplate.getForObject(TICKET_SERVICE_URL +"/availability/"+orderDto.getTicket().getTitle(),Boolean.class);
             if (!available) {
                 return false;
             }
-        }
         return true;
     }
 
@@ -62,21 +58,21 @@ public class OrderServiceImpl implements OrderService {
         List<Integer> tickerNumbers = new ArrayList<>();
 
         Order order = new Order();
-        for(TicketDto ticketDto : orderDto.getTickets()) {
+        TicketDto ticketDto = orderDto.getTicket();
 
-            ReservationTicketDto reservationTicketDto = new ReservationTicketDto();
-            reservationTicketDto.setQuantity(ticketDto.getQuantity());
-            reservationTicketDto.setTitle(ticketDto.getTitle());
+        ReservationTicketDto reservationTicketDto = new ReservationTicketDto();
+        reservationTicketDto.setQuantity(ticketDto.getQuantity());
+        reservationTicketDto.setTitle(ticketDto.getTitle());
 
-            HttpEntity<ReservationTicketDto> request = new HttpEntity<>(reservationTicketDto);
+        HttpEntity<ReservationTicketDto> request = new HttpEntity<>(reservationTicketDto);
 
-            ReservationTicketDtoResult reservationTicketDtoResult = restTemplate.
-                    postForObject(CATALOG_SERVICE_URL+"/check",request,ReservationTicketDtoResult.class);
-            if (reservationTicketDtoResult != null && reservationTicketDtoResult.getTicketsNumbers() != null
-                    && reservationTicketDtoResult.getTicketsNumbers().size() > 0) {
-                tickerNumbers.addAll(reservationTicketDtoResult.getTicketsNumbers());
-            }
+        ReservationTicketDtoResult reservationTicketDtoResult = restTemplate.
+                postForObject(TICKET_SERVICE_URL + "/check", request, ReservationTicketDtoResult.class);
+        if (reservationTicketDtoResult != null && reservationTicketDtoResult.getTicketsNumbers() != null
+                && reservationTicketDtoResult.getTicketsNumbers().size() > 0) {
+            tickerNumbers.addAll(reservationTicketDtoResult.getTicketsNumbers());
         }
+
 
         order.setTicketNumbers(tickerNumbers);
         order.setPersonIdentificationNumber(orderDto.getPersonIdentificationNumber());

@@ -19,7 +19,7 @@
         <module>config-server</module>
         <module>gateway-service</module>
         <module>registry-service</module>
-        <module>catalog-service</module>
+        <module>ticket-service</module>
         <module>order-service</module>
         <module>payment-service</module>
     </modules>
@@ -54,6 +54,11 @@
                 <groupId>pl.dmcs</groupId>
                 <artifactId>common</artifactId>
                 <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-core</artifactId>
+                <version>${jaxb-core.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

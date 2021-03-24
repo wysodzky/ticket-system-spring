@@ -8,9 +8,9 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 	<groupId>pl.dmcs.catalog.service</groupId>
-	<artifactId>catalog-service</artifactId>
+	<artifactId>ticket-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>catalog-service</name>
+	<name>ticket-service</name>
 
 	<dependencies>
 		<dependency>
