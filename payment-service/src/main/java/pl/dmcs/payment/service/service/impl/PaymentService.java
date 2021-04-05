@@ -3,8 +3,6 @@ package pl.dmcs.payment.service.service.impl;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
-import com.stripe.model.PaymentIntent;
-import com.stripe.param.PaymentIntentCreateParams;
 import org.springframework.stereotype.Service;
 import pl.dmcs.payment.service.model.Order;
 import pl.dmcs.payment.service.model.StripeCharge;
@@ -17,13 +15,9 @@ public class PaymentService implements pl.dmcs.payment.service.service.inf.Payme
     @Override
     public void makePayment(Order order) throws StripeException {
         Stripe.apiKey = API_KEY;
-
         StripeCharge stripeCharge = new StripeCharge(1800L,"mail@test.com",order.getId(),order.getPersonIdentificationNumber());
-
-
         Charge charge = Charge.create(stripeCharge.getCharge());
         System.out.println(charge);
-
     }
 
 }

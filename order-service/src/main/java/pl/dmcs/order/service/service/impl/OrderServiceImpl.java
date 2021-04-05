@@ -1,6 +1,9 @@
 package pl.dmcs.order.service.service.impl;
 
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import pl.dmcs.order.service.model.Order;
@@ -18,17 +21,12 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
 
     private static final String TICKET_SERVICE_URL = "http://localhost:8080/ticket-service/tickets";
+    private static final String PAYMENT_SERVICE_URL = "http://localhost:8080/payment-service/payments";
 
     private final OrderRepository orderRepository;
 
     public OrderServiceImpl(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
-    }
-
-
-    @Override
-    public void save(Order order) {
-        orderRepository.save(order);
     }
 
     @Override
@@ -52,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void creatOrder(OrderDto orderDto) {
+    public Integer createOrder(OrderDto orderDto) {
         RestTemplate restTemplate = new RestTemplate();
 
         List<Integer> tickerNumbers = new ArrayList<>();
@@ -76,6 +74,32 @@ public class OrderServiceImpl implements OrderService {
 
         order.setTicketNumbers(tickerNumbers);
         order.setPersonIdentificationNumber(orderDto.getPersonIdentificationNumber());
-        orderRepository.save(order);
+        Order savedOrder = orderRepository.saveAndFlush(order);
+        return savedOrder.getId();
+    }
+
+    @Override
+    public Boolean createOrderAndPay(OrderDto orderDto) {
+        Integer orderId = createOrder(orderDto);
+        return createPayment(orderRepository.getOne(orderId));
+    }
+
+
+    private boolean createPayment(Order order) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpEntity<Order> request = new HttpEntity<>(order);
+
+        ResponseEntity<String> exchange =
+                restTemplate.exchange(PAYMENT_SERVICE_URL + "/makePayment", HttpMethod.POST, request, String.class);
+
+        if (exchange.getStatusCode() == HttpStatus.OK) {
+            order.setPaid(true);
+            orderRepository.save(order);
+            return true;
+        }
+
+        return false;
+
     }
 }

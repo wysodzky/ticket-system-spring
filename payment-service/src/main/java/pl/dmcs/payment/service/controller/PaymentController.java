@@ -17,7 +17,7 @@ public class PaymentController {
     }
 
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/makePayment", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity makePayment(@RequestBody Order order) {
         try {

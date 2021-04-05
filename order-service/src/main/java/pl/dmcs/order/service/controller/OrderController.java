@@ -1,6 +1,5 @@
 package pl.dmcs.order.service.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.dmcs.order.service.model.dto.OrderDto;
@@ -21,10 +20,23 @@ public class OrderController {
     @ResponseBody
     public ResponseEntity makeOrder(@RequestBody OrderDto orderDto) {
         if (orderService.checkAvailability(orderDto)) {
-            orderService.creatOrder(orderDto);
+            orderService.createOrder(orderDto);
             return ResponseEntity.ok().build();
         }
 
+        return ResponseEntity.badRequest().build();
+    }
+
+    @RequestMapping(value = "/payOrder", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity makeOrderAndPay(@RequestBody OrderDto orderDto) {
+        if (orderService.checkAvailability(orderDto)) {
+            if (orderService.createOrderAndPay(orderDto)) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
+        }
         return ResponseEntity.badRequest().build();
     }
 
