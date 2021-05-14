@@ -49,7 +49,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public Ticket get(int id) {
-        return ticketRepository.getOne(id);
+        return ticketRepository.findById(id).get();
     }
 
     @Override
