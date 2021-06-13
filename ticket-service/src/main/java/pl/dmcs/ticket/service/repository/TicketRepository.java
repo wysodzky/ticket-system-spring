@@ -11,4 +11,5 @@ import java.util.List;
 public interface TicketRepository extends JpaRepository<Ticket,Integer> {
     List<Ticket> getAllByTitle(String title);
     List<Ticket> getAllByTitleAndReserved(String title,Boolean reserved);
+    void deleteTicketByTitle(String title);
 }

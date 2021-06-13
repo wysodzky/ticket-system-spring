@@ -63,4 +63,11 @@ public class TicketController {
         }
         return ResponseEntity.ok(reservationTicketDtoResult);
     }
+
+    @RequestMapping(value = "/removeTicket/{title}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public ResponseEntity removeTicket(@PathVariable("title") String title){
+        ticketService.removeLast(title);
+        return ResponseEntity.ok().build();
+    }
 }

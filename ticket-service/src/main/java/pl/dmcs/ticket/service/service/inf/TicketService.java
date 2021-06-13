@@ -22,4 +22,6 @@ public interface TicketService {
     List<Ticket> getAll();
 
     ReservationTicketDtoResult reserveTickets(ReservationTicketDto reservationTicketDto) throws NoAvailableTicketFoundException;
+
+    void removeLast(String title);
 }

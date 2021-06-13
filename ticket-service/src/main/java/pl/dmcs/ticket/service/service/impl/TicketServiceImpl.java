@@ -26,6 +26,12 @@ public class TicketServiceImpl implements TicketService {
         ticketRepository.save(ticket);
     }
 
+
+    @Override
+    public void removeLast(String title) {
+        ticketRepository.deleteTicketByTitle(title);
+    }
+
     @Override
     public void saveMultipleSameTickets(TicketDto ticketDto) {
         Integer quantity = ticketDto.getQuantity();
